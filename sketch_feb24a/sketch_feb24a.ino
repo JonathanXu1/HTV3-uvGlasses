@@ -13,7 +13,7 @@ SSD1306  display(0x3c, D3, D5);
 // Networking variables
 const char* ssid = "nO wiReLEsS hOTsPoTs";
 const char* password = "ZuccMe123";
-String host = "superjunction.herokuapp.com";
+String host = "uv-glasses.herokuapp.com";
 int port = 5000;
 DynamicJsonBuffer jsonBuffer(JSON_OBJECT_SIZE(3));
 String JSON;
