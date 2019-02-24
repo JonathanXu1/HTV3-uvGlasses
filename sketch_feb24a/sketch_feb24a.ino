@@ -13,10 +13,10 @@ SSD1306  display(0x3c, D3, D5);
 // Networking variables
 const char* ssid = "nO wiReLEsS hOTsPoTs";
 const char* password = "ZuccMe123";
-//String host = "uv-glasses.herokuapp.com";
- String host = "192.168.137.1";
+String host = "uv-glasses.herokuapp.com";
+//String host = "192.168.137.1";
 int port = 5000;
-int localMode = true;
+int localMode = false;
 
 DynamicJsonBuffer jsonBuffer(JSON_OBJECT_SIZE(1));
 String JSON;
@@ -70,19 +70,19 @@ void setup() {
 
 void loop() {
     //Get UV
-    int sensorValue = analogRead(A0);
-    
+    double sensorValue = analogRead(A0);
+    double uvValue = (((sensorValue/1023)*3.3)/4.3)*10;
     //Display
     display.clear();
-    display.drawString(0, 0, "UV: " + String(sensorValue));
+    display.drawString(0, 0, "UV Index: ");
+    display.drawString(0, 20, String(uvValue, 6));
     display.display();
     delay(500);
 
     if(socket.connected()){ // Run when connected to wifi and host
       JSON = "";
-      data["uv"] = sensorValue;
+      data["uv"] = uvValue;
       data.printTo(JSON);
       socket.emit("updateData", JSON);
-      Serial.println(JSON);
   }
 }
