@@ -1,15 +1,11 @@
-const express = require('express')
-var http = require('http').Server(express);
-const path = require('path')
-const PORT = process.env.PORT || 5000
+var app = require('express')();
+var http = require('http').Server(app);
 var io = require('socket.io')(http);
+var data = {uv: 0};
 
-express()
-  .use(express.static(path.join(__dirname, 'public')))
-  .set('views', path.join(__dirname, 'views'))
-  .set('view engine', 'ejs')
-  .get('/', (req, res) => res.render('pages/index'))
-  .listen(PORT, () => console.log(`Listening on ${ PORT }`))
+app.get('/', function(req, res) {
+  res.sendFile(__dirname + '/index.html');
+});
 
 io.on('connection', function(socket) {
   console.log('User connected: ' + socket.id);
@@ -27,3 +23,7 @@ io.on('connection', function(socket) {
     io.sockets.emit('updateData', data);
   });
 });
+
+http.listen(process.env.PORT || 5000, function() {
+  console.log('listening on *:' + process.env.PORT);
+})
